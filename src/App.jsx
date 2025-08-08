@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import ZombieFighters from './components/ZombieFighters/ZombieFighters.jsx';
+
 import './App.css';
 
 const App = () => {
@@ -89,25 +91,18 @@ const [zombieFighters, setZombieFighters] = useState(
   },
 ])
 
-const handleAddFighter = ((fighter) => {
+const handleAddFighter = (fighter) => {
 
-})
+};
 
   return (
     <>
     <h1>Zombies</h1>
     <h2>Money: {money}</h2>
-      <div className="App">
-      <ul className="zombie-list">
+      <div>
+      <ul>
         {zombieFighters.map((fighter) => (
-          <li key={fighter.id} className="zombie-card">
-            <img src={fighter.img} alt={fighter.name} />
-            <h2>{fighter.name}</h2>
-            <p>Price: {fighter.price}</p>
-            <p>Strength: {fighter.strength}</p>
-            <p>Agility: {fighter.agility}</p>
-            <button onClick={() => handleAddFighter(fighter)}>Add</button>
-          </li>
+          <ZombieFighters key={fighter.id} fighter={fighter} handleAddFighter={handleAddFighter}/>
         ))}
       </ul>
     </div>
