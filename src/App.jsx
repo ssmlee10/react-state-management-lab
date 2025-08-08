@@ -6,6 +6,7 @@ import "./App.css";
 const App = () => {
   const [team, setTeam] = useState([]);
   const [money, setMoney] = useState(100);
+  const [enoughMoney, setenoughMoney] = useState(true);
   const [zombieFighters, setZombieFighters] = useState([
     {
       id: 1,
@@ -88,50 +89,73 @@ const App = () => {
       img: "https://pages.git.generalassemb.ly/modular-curriculum-all-courses/react-state-management-lab/assets/e41f26.png",
     },
   ]);
+  const totalStrength = team.reduce((total, fighter) => {
+    return total + fighter.strength;
+  }, 0);
+
+  const totalAgility = team.reduce((total, fighter) => {
+    return total + fighter.agility;
+  }, 0);
 
   function handleAddFighter(fighter) {
     if (money < fighter.price) {
-      setPlentyOfMoney(false);
+      setenoughMoney(false);
       console.log("Not enough money");
       return;
     }
-    setPlentyOfMoney(true);
+    setenoughMoney(true);
     setMoney(money - fighter.price);
     setTeam([...team, fighter]);
     setZombieFighters(zombieFighters.filter((el) => el.id !== fighter.id));
   }
 
-  return (
-    <>
-      <h1>Zombies</h1>
-      <h2>Money: {money}</h2>
-      <h2>Your Team</h2>
-      {team.length === 0 ? (
-        <p>Pick some team members!</p>
-      ) : (
-        <ul>
+  function handleRemoveFighter(fighter) {
+    setMoney(money + fighter.price);
+    setTeam(team.filter((el) => el.id !== fighter.id));
+    setZombieFighters([...zombieFighters, fighter]);
+  }
+
+return (
+  <>
+    <h1>Zombies</h1>
+    <h2>Money: {money}</h2>
+    <h2>Total Strength: {totalStrength}</h2>
+    <h2>Total Agility: {totalAgility}</h2>
+
+    <h2>Your Team</h2>
+    {team.length === 0 ? (
+      <p>Pick some team members!</p>
+    ) : (
+      <ul>
+        {team.map((fighter) => (
           <li key={fighter.id}>
-            <ul>Name: {fighter.name}</ul>
+            <p>Name: {fighter.name}</p>
             <img src={fighter.img} alt={fighter.name} />
-            <ul>Price: {fighter.price}</ul>
-            <ul>Strength: {fighter.strength}</ul>
-            <ul>Agility: {fighter.agility}</ul>
+            <p>Price: {fighter.price}</p>
+            <p>Strength: {fighter.strength}</p>
+            <p>Agility: {fighter.agility}</p>
+            <button onClick={() => handleRemoveFighter(fighter)}>Remove</button>
           </li>
-        </ul>
-      )}
-      <div>
-        <ul>
-          {zombieFighters.map((fighter) => (
-            <ZombieFighters
-              key={fighter.id}
-              fighter={fighter}
-              handleAddFighter={handleAddFighter}
-            />
-          ))}
-        </ul>
-      </div>
-    </>
-  );
+        ))}
+      </ul>
+    )}
+
+    <h2>Available Fighters</h2>
+    <ul>
+      {zombieFighters.map((fighter) => (
+        <li key={fighter.id}>
+          <img src={fighter.img} alt={fighter.name} />
+          <h3>{fighter.name}</h3>
+          <p>Price: {fighter.price}</p>
+          <p>Strength: {fighter.strength}</p>
+          <p>Agility: {fighter.agility}</p>
+          <button onClick={() => handleAddFighter(fighter)}>Add</button>
+        </li>
+      ))}
+    </ul>
+  </>
+);
 };
+
 
 export default App;
