@@ -1,6 +1,4 @@
 import { useState } from "react";
-import ZombieFighters from "./components/ZombieFighters/ZombieFighters.jsx";
-
 import "./App.css";
 
 const App = () => {
